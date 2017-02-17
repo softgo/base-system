@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SystemServerInfo">
+
+	<!-- 输出列 -->
+	<sql id="baseColumnList">
+		u.id as id ,
+		u.is_delete as isDelete ,
+		u.uuid as uuid ,
+		u.create_time as createTime ,
+		u.update_time as updateTime ,
+		u.create_user as createUser ,
+		u.update_user as updateUser ,
+		u.cpu_usage as cpuUsage ,
+		u.set_cpu_usage as setCpuUsage ,
+		u.jvm_usage as jvmUsage ,
+		u.set_jvm_usage as setJvmUsage ,
+		u.ram_usage as ramUsage ,
+		u.set_ram_usage as setRamUsage ,
+		u.manager_email as managerEmail ,
+		u.mark as mark 
+	</sql>
+	
+	
+	<!-- 查询的列 -->
+	<sql id="searchCriteria">
+		<if test="id != null and id !=-1  ">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="isDelete != null and isDelete !=-1  ">
+			and u.is_delete = #{isDelete,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null and uuid != ''">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null and uuidLike != ''">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createTime != null ">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateTime != null ">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="createUser != null and createUser !=-1  ">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateUser != null and updateUser !=-1  ">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="cpuUsage != null and cpuUsage != ''">
+			and u.cpu_usage = #{cpuUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="cpuUsageLike != null and cpuUsageLike != ''">
+			and u.cpu_usage like CONCAT('%',#{cpuUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="setCpuUsage != null and setCpuUsage != ''">
+			and u.set_cpu_usage = #{setCpuUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setCpuUsageLike != null and setCpuUsageLike != ''">
+			and u.set_cpu_usage like CONCAT('%',#{setCpuUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="jvmUsage != null and jvmUsage != ''">
+			and u.jvm_usage = #{jvmUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="jvmUsageLike != null and jvmUsageLike != ''">
+			and u.jvm_usage like CONCAT('%',#{jvmUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="setJvmUsage != null and setJvmUsage != ''">
+			and u.set_jvm_usage = #{setJvmUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setJvmUsageLike != null and setJvmUsageLike != ''">
+			and u.set_jvm_usage like CONCAT('%',#{setJvmUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="ramUsage != null and ramUsage != ''">
+			and u.ram_usage = #{ramUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="ramUsageLike != null and ramUsageLike != ''">
+			and u.ram_usage like CONCAT('%',#{ramUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="setRamUsage != null and setRamUsage != ''">
+			and u.set_ram_usage = #{setRamUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setRamUsageLike != null and setRamUsageLike != ''">
+			and u.set_ram_usage like CONCAT('%',#{setRamUsageLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="managerEmail != null and managerEmail != ''">
+			and u.manager_email = #{managerEmail,jdbcType=VARCHAR}
+		</if>
+		<if test="managerEmailLike != null and managerEmailLike != ''">
+			and u.manager_email like CONCAT('%',#{managerEmailLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="mark != null and mark != ''">
+			and u.mark = #{mark,jdbcType=VARCHAR}
+		</if>
+		<if test="markLike != null and markLike != ''">
+			and u.mark like CONCAT('%',#{markLike,jdbcType=VARCHAR},'%') 
+		</if>
+	</sql>
+
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	
+	
+	<!-- 查询总数 -->
+	<select id="queryListResultCount" parameterType="java.util.Map" flushCache="false" resultType="java.lang.Integer">
+		select
+			count(u.id)
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+	</select>
+	
+	<!-- 查询所有列表数据 -->
+	<select id="queryAllListResult" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+	</select>
+	
+	
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+		    <if test="whereSqlStr != null and whereSqlStr != ''">
+			and ${whereSqlStr}
+			</if>
+	</select>
+	
+	
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" flushCache="false" resultType="java.lang.Integer">
+		select
+			count(u.id)
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+			<if test="whereSqlStr != null and whereSqlStr != ''">
+			and ${whereSqlStr}
+			</if>
+	</select>
+	
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById"  parameterType="java.lang.Integer"  flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+		    u.is_delete = 0 
+			and u.id = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	
+	<!-- 通过uuid查询 -->
+	<select id="querySingleResultByUUID" parameterType="java.lang.String" flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+			 u.is_delete = 0 
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<!-- 通过属性查询 -->
+	<select id="querySingleResultByParams" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemServerInfo">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_SERVER_INFO u
+		where
+			u.is_delete = 0 
+			<include refid="searchCriteria" />
+	</select>
+
+
+	<!-- 保存对象,返回主键设置 -->
+	<insert id="saveObject" parameterType="com.javabase.system.entity.SystemServerInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true" >
+		insert into SYSTEM_SERVER_INFO (
+			is_delete,
+			uuid,
+			create_time,
+			update_time,
+			create_user,
+			update_user,
+			cpu_usage,
+			set_cpu_usage,
+			jvm_usage,
+			set_jvm_usage,
+			ram_usage,
+			set_ram_usage,
+			manager_email,
+			mark
+		) values (
+			#{isDelete,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{createUser,jdbcType=NUMERIC},
+			#{updateUser,jdbcType=NUMERIC},
+			#{cpuUsage,jdbcType=VARCHAR},
+			#{setCpuUsage,jdbcType=VARCHAR},
+			#{jvmUsage,jdbcType=VARCHAR},
+			#{setJvmUsage,jdbcType=VARCHAR},
+			#{ramUsage,jdbcType=VARCHAR},
+			#{setRamUsage,jdbcType=VARCHAR},
+			#{managerEmail,jdbcType=VARCHAR},
+			#{mark,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	
+	<insert id="saveBatchObject" parameterType="ArrayList" flushCache="true" >
+		insert into SYSTEM_SERVER_INFO (
+			is_delete,
+			uuid,
+			create_time,
+			update_time,
+			create_user,
+			update_user,
+			cpu_usage,
+			set_cpu_usage,
+			jvm_usage,
+			set_jvm_usage,
+			ram_usage,
+			set_ram_usage,
+			manager_email,
+			mark
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.isDelete,jdbcType=NUMERIC},
+			#{item.uuid,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.updateTime,jdbcType=TIMESTAMP},
+			#{item.createUser,jdbcType=NUMERIC},
+			#{item.updateUser,jdbcType=NUMERIC},
+			#{item.cpuUsage,jdbcType=VARCHAR},
+			#{item.setCpuUsage,jdbcType=VARCHAR},
+			#{item.jvmUsage,jdbcType=VARCHAR},
+			#{item.setJvmUsage,jdbcType=VARCHAR},
+			#{item.ramUsage,jdbcType=VARCHAR},
+			#{item.setRamUsage,jdbcType=VARCHAR},
+			#{item.managerEmail,jdbcType=VARCHAR},
+			#{item.mark,jdbcType=VARCHAR}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 修改条件 -->
+	<sql id="updateColumnWhere">
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		<if test="isDelete != null and isDelete !=-1  ">
+			, u.is_delete = #{isDelete,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null ">
+			, u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null and updateUser !=-1 ">
+			, u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="cpuUsage != null and cpuUsage != ''">
+			, u.cpu_usage = #{cpuUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setCpuUsage != null and setCpuUsage != ''">
+			, u.set_cpu_usage = #{setCpuUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="jvmUsage != null and jvmUsage != ''">
+			, u.jvm_usage = #{jvmUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setJvmUsage != null and setJvmUsage != ''">
+			, u.set_jvm_usage = #{setJvmUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="ramUsage != null and ramUsage != ''">
+			, u.ram_usage = #{ramUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="setRamUsage != null and setRamUsage != ''">
+			, u.set_ram_usage = #{setRamUsage,jdbcType=VARCHAR}
+		</if>
+		<if test="managerEmail != null and managerEmail != ''">
+			, u.manager_email = #{managerEmail,jdbcType=VARCHAR}
+		</if>
+		<if test="mark != null and mark != ''">
+			, u.mark = #{mark,jdbcType=VARCHAR}
+		</if>		
+		</set>		
+	</sql>
+	
+	
+	<!-- 修改 -->
+	<update id="updateObjectByID" flushCache="true" parameterType="com.javabase.system.entity.SystemServerInfo">
+		update SYSTEM_SERVER_INFO u
+		<include refid="updateColumnWhere" />
+		where
+            u.id = #{id,jdbcType=NUMERIC}
+	</update>
+	
+	
+	<!-- 修改 -->
+	<update id="updateObjectByUUID" flushCache="true" parameterType="com.javabase.system.entity.SystemServerInfo">
+		update SYSTEM_SERVER_INFO u
+		<include refid="updateColumnWhere" />
+		where
+            u.uuid = #{uuid,jdbcType=VARCHAR}
+	</update>
+	
+	
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYSTEM_SERVER_INFO ${updateSqlStr} where ${whereSqlStr}
+	</update>
+	
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" flushCache="true" parameterType="java.util.Map">
+		update SYSTEM_SERVER_INFO u set u.is_delete = 1
+		<if test="updateTime != null ">
+		    ,u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null and updateUser != ''">
+            ,u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null and id != ''">
+				u.id = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	
+	
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYSTEM_SERVER_INFO set is_delete = 1 where ${whereSqlStr}
+	</update>
+	
+	
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" flushCache="true"  parameterType="java.lang.Integer"  >
+		delete from SYSTEM_SERVER_INFO where id = #{id,jdbcType=NUMERIC}
+	</delete>
+	
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		delete from SYSTEM_SERVER_INFO where ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="CustomerSQL">
+
+    <!-- 通过用户id,查找对象用户角色(一个用户对应多个角色的时候怎么办?) -->
+    <select id="getSystemRoleByUserId" parameterType="java.lang.Integer" resultType="com.javabase.system.entity.SystemRole">
+        select  
+	        id as roleId,
+		    parent_id as parentId,
+		    role_name as roleName,
+		    role_key as roleKey,
+		    description as description
+        from 
+        	SYSTEM_ROLE 
+        where 
+        	id in (select role_id from SYSTEM_USER_ROLE where user_id= #{userId,jdbcType=NUMERIC}
+    </select>
+    
+   <sql id="select_columns">
+		id as id,
+	    source_name as sourceName,
+	    parent_id as parentId,
+	    source_key as sourceKey,
+	    source_type as sourceType,
+	    source_url as sourceUrl,
+	    source_level as sourceLevel,
+	    description as description,
+        source_status as sourceStatus,
+        is_iframe as isIframe
+	</sql>
+    
+    <!-- 根据用户Id获取该用户的权限-->
+    <select id="getSystemSourcesByUserId" parameterType="java.lang.Integer" resultType="com.javabase.system.entity.SystemSource">
+        select  
+	    <include refid="select_columns" />
+        from 
+        	SYSTEM_SOURCE 
+       	where 
+       		id in (
+            	select source_id from SYSTEM_SOURCE_ROLE where role_id in ( select role_id from SYSTEM_USER_ROLE where user_id=#{userId,jdbcType=NUMERIC})
+        	)
+    </select>
+    
+    <!-- 根据角色Id获取该角色的权限-->
+    <select id="getSystemSourcesByRoleId" parameterType="java.lang.Integer" resultType="com.javabase.system.entity.SystemSource">
+        select  
+	    <include refid="select_columns" />
+        from 
+        	SYSTEM_SOURCE 
+       	where 
+       		id in (
+            	select source_id from SYSTEM_SOURCE_ROLE where role_id=#{roleId,jdbcType=NUMERIC}
+        	)
+    </select>
+    
+    <!-- 根据用户名获取该用户的权限-->
+    <select id="getSystemSourcesByUserName" parameterType="java.lang.String" resultType="com.javabase.system.entity.SystemSource">
+        select  
+        <include refid="select_columns" />
+        from SYSTEM_SOURCE where id in (
+            select source_id from SYSTEM_SOURCE_ROLE where role_id in ( select role_id from SYSTEM_USER_ROLE sur,SYSTEM_USER su where sur.user_id=su.id and su.user_name=#{userName,jdbcType=VARCHAR})
+        )
+    </select>
+    
+</mapper>

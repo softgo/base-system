@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SystemUser">
+
+	<!-- 输出列 -->
+	<sql id="baseColumnList">
+		u.id as id ,
+		u.is_delete as isDelete ,
+		u.uuid as uuid ,
+		u.create_time as createTime ,
+		u.update_time as updateTime ,
+		u.create_user as createUser ,
+		u.update_user as updateUser ,
+		u.parent_id as parentId ,
+		u.user_name as userName ,
+		u.user_pass as userPass ,
+		u.user_sex as userSex ,
+		u.user_address as userAddress ,
+		u.user_phone as userPhone ,
+		u.user_mail as userMail ,
+		u.user_qq as userQq ,
+		u.status as status 
+	</sql>
+	
+	
+	<!-- 查询的列 -->
+	<sql id="searchCriteria">
+		<if test="id != null and id !=-1  ">
+			and u.id = #{id,jdbcType=NUMERIC}
+		</if>
+		<if test="isDelete != null and isDelete !=-1  ">
+			and u.is_delete = #{isDelete,jdbcType=NUMERIC}
+		</if>
+		<if test="uuid != null and uuid != ''">
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+		</if>
+		<if test="uuidLike != null and uuidLike != ''">
+			and u.uuid like CONCAT('%',#{uuidLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="createTime != null ">
+			and u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateTime != null ">
+			and u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="createUser != null and createUser !=-1  ">
+			and u.create_user = #{createUser,jdbcType=NUMERIC}
+		</if>
+		<if test="updateUser != null and updateUser !=-1  ">
+			and u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="parentId != null and parentId !=-1  ">
+			and u.parent_id = #{parentId,jdbcType=NUMERIC}
+		</if>
+		<if test="userName != null and userName != ''">
+			and u.user_name = #{userName,jdbcType=VARCHAR}
+		</if>
+		<if test="userNameLike != null and userNameLike != ''">
+			and u.user_name like CONCAT('%',#{userNameLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userPass != null and userPass != ''">
+			and u.user_pass = #{userPass,jdbcType=VARCHAR}
+		</if>
+		<if test="userPassLike != null and userPassLike != ''">
+			and u.user_pass like CONCAT('%',#{userPassLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userSex != null and userSex !=-1  ">
+			and u.user_sex = #{userSex,jdbcType=NUMERIC}
+		</if>
+		<if test="userAddress != null and userAddress != ''">
+			and u.user_address = #{userAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="userAddressLike != null and userAddressLike != ''">
+			and u.user_address like CONCAT('%',#{userAddressLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userPhone != null and userPhone != ''">
+			and u.user_phone = #{userPhone,jdbcType=VARCHAR}
+		</if>
+		<if test="userPhoneLike != null and userPhoneLike != ''">
+			and u.user_phone like CONCAT('%',#{userPhoneLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userMail != null and userMail != ''">
+			and u.user_mail = #{userMail,jdbcType=VARCHAR}
+		</if>
+		<if test="userMailLike != null and userMailLike != ''">
+			and u.user_mail like CONCAT('%',#{userMailLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="userQq != null and userQq != ''">
+			and u.user_qq = #{userQq,jdbcType=VARCHAR}
+		</if>
+		<if test="userQqLike != null and userQqLike != ''">
+			and u.user_qq like CONCAT('%',#{userQqLike,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="status != null and status !=-1  ">
+			and u.status = #{status,jdbcType=NUMERIC}
+		</if>
+	</sql>
+
+
+	<!-- 查询列表数据 -->
+	<select id="queryListResult" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+			<include refid="Util.mysqlPage" />
+	</select>
+	
+	
+	<!-- 查询总数 -->
+	<select id="queryListResultCount" parameterType="java.util.Map" flushCache="false" resultType="java.lang.Integer">
+		select
+			count(u.id)
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+	</select>
+	
+	<!-- 查询所有列表数据 -->
+	<select id="queryAllListResult" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+			<include refid="searchCriteria" />
+			<include refid="Util.orderCriteria" />
+	</select>
+	
+	
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultByWhere" parameterType="java.util.Map" statementType="STATEMENT" flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+		    <if test="whereSqlStr != null and whereSqlStr != ''">
+			and ${whereSqlStr}
+			</if>
+	</select>
+	
+	
+	<!-- 自定义查询列表where条件 -->
+	<select id="queryListResultCountByWhere" parameterType="java.util.Map" statementType="STATEMENT" flushCache="false" resultType="java.lang.Integer">
+		select
+			count(u.id)
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+			<if test="whereSqlStr != null and whereSqlStr != ''">
+			and ${whereSqlStr}
+			</if>
+	</select>
+	
+	
+	<!-- 查询一条数据 -->
+	<select id="querySingleResultById"  parameterType="java.lang.Integer"  flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+		    u.is_delete = 0 
+			and u.id = #{id,jdbcType=NUMERIC}
+	</select>
+	
+	
+	<!-- 通过uuid查询 -->
+	<select id="querySingleResultByUUID" parameterType="java.lang.String" flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+			 u.is_delete = 0 
+			and u.uuid = #{uuid,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<!-- 通过属性查询 -->
+	<select id="querySingleResultByParams" parameterType="java.util.Map" flushCache="false" resultType="com.javabase.system.entity.SystemUser">
+		select
+			<include refid="baseColumnList" />
+		from
+			SYSTEM_USER u
+		where
+			u.is_delete = 0 
+			<include refid="searchCriteria" />
+	</select>
+
+
+	<!-- 保存对象,返回主键设置 -->
+	<insert id="saveObject" parameterType="com.javabase.system.entity.SystemUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true" >
+		insert into SYSTEM_USER (
+			is_delete,
+			uuid,
+			create_time,
+			update_time,
+			create_user,
+			update_user,
+			parent_id,
+			user_name,
+			user_pass,
+			user_sex,
+			user_address,
+			user_phone,
+			user_mail,
+			user_qq,
+			status
+		) values (
+			#{isDelete,jdbcType=NUMERIC},
+			#{uuid,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{createUser,jdbcType=NUMERIC},
+			#{updateUser,jdbcType=NUMERIC},
+			#{parentId,jdbcType=NUMERIC},
+			#{userName,jdbcType=VARCHAR},
+			#{userPass,jdbcType=VARCHAR},
+			#{userSex,jdbcType=NUMERIC},
+			#{userAddress,jdbcType=VARCHAR},
+			#{userPhone,jdbcType=VARCHAR},
+			#{userMail,jdbcType=VARCHAR},
+			#{userQq,jdbcType=VARCHAR},
+			#{status,jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	
+	<insert id="saveBatchObject" parameterType="ArrayList" flushCache="true" >
+		insert into SYSTEM_USER (
+			is_delete,
+			uuid,
+			create_time,
+			update_time,
+			create_user,
+			update_user,
+			parent_id,
+			user_name,
+			user_pass,
+			user_sex,
+			user_address,
+			user_phone,
+			user_mail,
+			user_qq,
+			status
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.isDelete,jdbcType=NUMERIC},
+			#{item.uuid,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.updateTime,jdbcType=TIMESTAMP},
+			#{item.createUser,jdbcType=NUMERIC},
+			#{item.updateUser,jdbcType=NUMERIC},
+			#{item.parentId,jdbcType=NUMERIC},
+			#{item.userName,jdbcType=VARCHAR},
+			#{item.userPass,jdbcType=VARCHAR},
+			#{item.userSex,jdbcType=NUMERIC},
+			#{item.userAddress,jdbcType=VARCHAR},
+			#{item.userPhone,jdbcType=VARCHAR},
+			#{item.userMail,jdbcType=VARCHAR},
+			#{item.userQq,jdbcType=VARCHAR},
+			#{item.status,jdbcType=NUMERIC}
+		)
+		</foreach>
+	</insert>
+
+
+	<!-- 修改条件 -->
+	<sql id="updateColumnWhere">
+		<set>
+			u.create_time = #{createTime,jdbcType=TIMESTAMP}
+		<if test="isDelete != null and isDelete !=-1  ">
+			, u.is_delete = #{isDelete,jdbcType=NUMERIC}
+		</if>
+		<if test="updateTime != null ">
+			, u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null and updateUser !=-1 ">
+			, u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		<if test="parentId != null and parentId !=-1 ">
+			, u.parent_id = #{parentId,jdbcType=NUMERIC}
+		</if>
+		<if test="userName != null and userName != ''">
+			, u.user_name = #{userName,jdbcType=VARCHAR}
+		</if>
+		<if test="userPass != null and userPass != ''">
+			, u.user_pass = #{userPass,jdbcType=VARCHAR}
+		</if>
+		<if test="userSex != null and userSex !=-1 ">
+			, u.user_sex = #{userSex,jdbcType=NUMERIC}
+		</if>
+		<if test="userAddress != null and userAddress != ''">
+			, u.user_address = #{userAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="userPhone != null and userPhone != ''">
+			, u.user_phone = #{userPhone,jdbcType=VARCHAR}
+		</if>
+		<if test="userMail != null and userMail != ''">
+			, u.user_mail = #{userMail,jdbcType=VARCHAR}
+		</if>
+		<if test="userQq != null and userQq != ''">
+			, u.user_qq = #{userQq,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null and status !=-1 ">
+			, u.status = #{status,jdbcType=NUMERIC}
+		</if>
+		</set>		
+	</sql>
+		
+	<!-- 修改 -->
+	<update id="updateObjectByID" flushCache="true" parameterType="com.javabase.system.entity.SystemUser">
+		update SYSTEM_USER u
+		<include refid="updateColumnWhere" />
+		where
+            u.id = #{id,jdbcType=NUMERIC}
+	</update>
+	
+	
+	<!-- 修改 -->
+	<update id="updateObjectByUUID" flushCache="true" parameterType="com.javabase.system.entity.SystemUser">
+		update SYSTEM_USER u
+		<include refid="updateColumnWhere" />
+		where
+            u.uuid = #{uuid,jdbcType=VARCHAR}
+	</update>
+	
+	
+	<!-- 自定义修改列以及修改条件 -->
+	<update id="updateCustomColumnByWhere" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYSTEM_USER ${updateSqlStr} where ${whereSqlStr}
+	</update>
+	
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelete" flushCache="true" parameterType="java.util.Map">
+		update SYSTEM_USER u set u.is_delete = 1
+		<if test="updateTime != null ">
+		    ,u.update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateUser != null and updateUser != ''">
+            ,u.update_user = #{updateUser,jdbcType=NUMERIC}
+		</if>
+		where
+			<if test="id != null and id != ''">
+				u.id = #{id,jdbcType=NUMERIC}
+			</if>
+			<if test="id == null and uuid != null">
+				u.uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="id == null and uuid == null">
+				u.id = null
+			</if>
+	</update>
+	
+	
+	<!-- 自定义逻辑条件 -->
+	<update id="logicWhereDelete" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		update SYSTEM_USER set is_delete = 1 where ${whereSqlStr}
+	</update>
+	
+	
+	<!-- 物理删除 -->
+	<delete id="physicalDelete" flushCache="true"  parameterType="java.lang.Integer"  >
+		delete from SYSTEM_USER where id = #{id,jdbcType=NUMERIC}
+	</delete>
+	
+	
+	<!-- 自定义物理条件 -->
+	<delete id="physicalWhereDelete" flushCache="true" parameterType="java.util.Map" statementType="STATEMENT">
+		delete from SYSTEM_USER where ${whereSqlStr}
+	</delete>
+	
+	
+</mapper>
